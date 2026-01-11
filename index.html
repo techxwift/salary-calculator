@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Salary Calculator</h2>
+
+    <label>Enter Gross Salary (GHS):</label><br><br>
+    <input type="number" id="salary"><br><br>
+
+    <button onclick="calculateSalary()">Calculate</button>
+
+    <p id="result"></p>
+
+    <script>
+        function calculateSalary() {
+
+            // Get salary from user
+            let salary = Number(document.getElementById("salary").value);
+
+            // SSNIT calculation (5.5%)
+            let ssnit = salary * 0.055;
+
+            // Money left after SSNIT
+            let income = salary - ssnit;
+
+            let tax = 0;
+
+            // First 490 → no tax
+            if (income > 490) {
+                income -= 490;
+            }
+
+            // Next 110 → 5%
+            if (income > 0) {
+                let part = Math.min(income, 110);
+                tax += part * 0.05;
+                income -= part;
+            }
+
+            // Next 130 → 10%
+            if (income > 0) {
+                let part = Math.min(income, 130);
+                tax += part * 0.10;
+                income -= part;
+            }
+
+            // Next 3,166.67 → 17.5%
+            if (income > 0) {
+                let part = Math.min(income, 3166.67);
+                tax += part * 0.175;
+                income -= part;
+            }
+
+            // Remaining → 25%
+            if (income > 0) {
+                tax += income * 0.25;
+            }
+
+            // Take-home salary
+            let netSalary = salary - ssnit - tax;
+
+            // Show result
+            document.getElementById("result").innerHTML =
+                "SSNIT: GHS " + ssnit.toFixed(2) + "<br>" +
+                "Tax: GHS " + tax.toFixed(2) + "<br>" +
+                "Take Home Salary: GHS " + netSalary.toFixed(2);
+        }
+    </script>
+</body>
+</html>
